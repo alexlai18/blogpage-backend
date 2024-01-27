@@ -4,9 +4,8 @@ const Post = require("../models/post");
 
 router.get('/', async (req, res) => {
   // This route is specifically for get all posts
+  console.log("Attempting to get all posts from the database");
   try {
-    console.log("Attempting to get all posts from the database")
-    console.log(Post)
     const posts = await Post.find();
 
     return res.json(posts);
@@ -17,8 +16,8 @@ router.get('/', async (req, res) => {
 
 router.post('/', async (req, res) => {
   // Create a new post
+  console.log("Attempting to create a new post");
   try {
-    console.log("Attempting to create a new post")
     const { title, summary, content, image } = await req.body;
     const newPost = await Post.create({
       title: title,
