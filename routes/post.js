@@ -8,10 +8,10 @@ router.get('/', async (req, res) => {
     console.log("Attempting to get all posts from the database")
     console.log(Post)
     const posts = await Post.find();
-    console.log(posts);
-    res.json(posts);
+
+    return res.json(posts);
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
 });
 
@@ -27,14 +27,78 @@ router.post('/', async (req, res) => {
       image: image
     });
     if (newPost) {
-      res.json(newPost);
+      return res.json(newPost);
     } else {
       console.log("Failed to create a new post");
-      res.status(500);
+      return res.status(500);
     }
   } catch (err) {
-    res.status(500).json({ message: err.message });
+    return res.status(500).json({ message: err.message });
   }
-})
+});
+
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  console.log(`Attempting to get blog post with id ${id}`);
+  try {
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).json({message: `Blog post with id ${id} does not exist`})
+    }
+    return res.json(post);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+});
+
+router.get('/:id', async (req, res) => {
+  const { id } = req.params;
+  console.log(`Attempting to get blog post with id ${id}`);
+  try {
+    const post = await Post.findById(id);
+
+    if (!post) {
+      return res.status(404).json({message: `Blog post with id ${id} does not exist`})
+    }
+    return res.json(post);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+});
+
+router.delete('/:id', async (req, res) => {
+  console.log(`Attempting to delete blog post with id ${id}`);
+  try {
+    const { id } = req.params;
+    await Post.findByIdAndDelete(id);
+    return res.json({ message: "Post Deleted" });
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+});
+
+// Will add functionality to updating blogs later
+router.patch('/:id', async (req, res) => {
+  const { id } = req.params;
+  console.log(`Attempting to update post with id ${id}`)
+  try {
+    const { title, summary, content, image } = await req.body;
+    const newPost = await Post.findByIdAndUpdate(id, {
+      title: title,
+      summary: summary,
+      content: content,
+      image: image
+    });
+    if (newPost) {
+      return res.json(newPost);
+    } else {
+      console.log(`Post with id ${id} does not exist`);
+      return res.status(404);
+    }
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+});
 
 module.exports = router;
