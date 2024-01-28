@@ -24,6 +24,9 @@ app.use(express.json());
 const postRouter = require("./routes/post");
 app.use("/api/v1/post", postRouter);
 
+const userRouter = require("./routes/user");
+app.use("/api/v1/user", userRouter);
+
 app.listen(PORT, (err) => {
   if (!err) {
     console.log("🚀 SERVER LISTETNING IN ON PORT 5000 🚀");

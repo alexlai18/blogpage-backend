@@ -18,11 +18,12 @@ router.post('/', async (req, res) => {
   // Create a new post
   console.log("Attempting to create a new post");
   try {
-    const { title, summary, content, image } = await req.body;
+    const { title, summary, content, author, image } = await req.body;
     const newPost = await Post.create({
       title: title,
       summary: summary,
       content: content,
+      author: author,
       image: image
     });
     if (newPost) {
