@@ -1,8 +1,6 @@
 require('dotenv').config();
 
 const express = require("express");
-const serverless = require("serverless-http");
-
 const app = express();
 const cors = require("cors");
 app.use(cors());
@@ -24,18 +22,13 @@ db.once('open', () => console.log("Connected to Database"));
 app.use(express.json());
 
 const postRouter = require("./routes/post");
-app.use("/.netlify/functions/api/v1/post", postRouter);
+app.use("/api/v1/post", postRouter);
 
 const userRouter = require("./routes/user");
-app.use("/.netlify/functions/api/v1/user", userRouter);
+app.use("/api/v1/user", userRouter);
 
-app.listen(PORT, (err) => {
-  if (!err) {
-    console.log("🚀 SERVER LISTETNING IN ON PORT 5000 🚀");
-  } else {
-    console.log("Error occurred, server can't start 😔");
-  }
+app.listen(PORT, () => {
+  console.log("Server Running on Port: 5000");
 })
 
 module.exports = app;
-module.exports.handler = serverless(app);
