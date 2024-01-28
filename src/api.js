@@ -1,6 +1,8 @@
 require('dotenv').config();
 
 const express = require("express");
+const serverless = require("serverless-http");
+
 const app = express();
 const cors = require("cors");
 app.use(cors());
@@ -22,10 +24,10 @@ db.once('open', () => console.log("Connected to Database"));
 app.use(express.json());
 
 const postRouter = require("./routes/post");
-app.use("/api/v1/post", postRouter);
+app.use("/.netlify/functions/api/v1/post", postRouter);
 
 const userRouter = require("./routes/user");
-app.use("/api/v1/user", userRouter);
+app.use("/.netlify/functions/api/v1/user", userRouter);
 
 app.listen(PORT, (err) => {
   if (!err) {
@@ -36,3 +38,4 @@ app.listen(PORT, (err) => {
 })
 
 module.exports = app;
+module.exports.handler = serverless(app);
